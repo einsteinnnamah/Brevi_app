@@ -1,13 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-
+import { LinkContext } from "../Context/LinkContext";
+import { useContext } from "react";
 const ShortenLinkForm = () => {
   const [longURL, setLongURL] = useState("");
   const [name, setName] = useState("");
   const [customAlias, setCustomAlias] = useState("");
   const [shortURL, setShortURL] = useState("");
   const [error, setError] = useState("");
+
+  const {links} = useContext(LinkContext)
+  console.log(links, '🔥')
 
   const validateURL = (url: string) => {
     const urlPattern = /^(ftp|http|https):\/\/[^ "]+$/;
@@ -34,7 +38,6 @@ const ShortenLinkForm = () => {
       setError("Error occurred during URL shortening");
     }
   };
-
 
   return (
     <div>
@@ -73,8 +76,28 @@ const ShortenLinkForm = () => {
               {longURL}
             </a>
           </p>
-        </div>
+        </div> 
       )}
+
+{links.map((links: any) => (
+                      <div key={links.id}>
+                      <p>Name: {links.data.name}</p>
+                      <p>
+                        Short URL:{" "}
+                        <a href={links.data.shorturl} target="_blank" rel="noopener noreferrer">
+                          {links.data.shorturl}
+                        </a>
+                      </p>
+                      <p>
+                        Long URL:{" "}
+                        <a href={links.data.longurl} target="_blank" rel="noopener noreferrer">
+                          {links.data.longurl}
+                        </a>
+                      </p>
+                    </div>
+          ) )
+
+          }
     </div>
   );
 };

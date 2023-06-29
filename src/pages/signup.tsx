@@ -1,6 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore"
+import { db } from "./firebase";
 import { auth } from "./firebase";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,7 +14,8 @@ import signup from '../../public/users/signup.png'
 
 const Signup = () => {
   const router = useRouter();
-
+const [firstName, setfirstName] = useState("");
+const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,9 +24,15 @@ const Signup = () => {
     e.preventDefault();
 
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
+             await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        email: user.email,
+        firstName: firstName,
+        lastName: lastName
+      });
         console.log(user);
         router.push("/login");
         // ...
@@ -100,10 +109,11 @@ const Signup = () => {
                     First name
                   </label>
                   <input
-                    disabled = {true}
                     className="w-[300px] disabled focus:outline-none md:w-[200px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
                     type="text"
                     name="firstName"
+                    value={firstName}
+                  onChange={(e) => setfirstName(e.target.value)}
                     placeholder="Your first name here"
                     id=""
                   />
@@ -116,10 +126,11 @@ const Signup = () => {
                     Last name
                   </label>
                   <input
-                  disabled = {true}
                     className="w-[300px] md:w-[200px] focus:outline-none px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
                     type="text"
                     name="firstName"
+                                      value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                     placeholder="Your last name here"
                     id=""
                   />

@@ -1,16 +1,16 @@
-import { createContext, useEffect, useState } from 'react'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from '../pages/firebase'
+import { createContext, useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../pages/firebase';
 
-const LinkContext = createContext()
+const LinkContext = createContext();
 
 const LinkProvider = ({ children }) => {
-  const [links, setLinks] = useState([])
-  const [users, setUsers] = useState([])
+  const [links, setLinks] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const getUsers = async () => {
-      const querySnapshot = await getDocs(collection(db, 'users'))
+      const querySnapshot = await getDocs(collection(db, 'users'));
       setUsers(
         querySnapshot.docs.map((doc) => {
           return {
@@ -18,37 +18,38 @@ const LinkProvider = ({ children }) => {
             data: {
               ...doc.data(),
             },
-          }
+          };
         })
-      )
-    }
+      );
+    };
 
-    getUsers()
-  }, [])
+    getUsers();
+  }, []);
 
   useEffect(() => {
     const getLinks = async () => {
-      const querySnapshot = await getDocs(collection(db, 'links'))
+      const querySnapshot = await getDocs(collection(db, 'links'));
       setLinks(
-        querySnapshot.docs.map(doc => {
+        querySnapshot.docs.map((doc) => {
           return {
             id: doc.id,
             data: {
               name: doc.data().name,
               longurl: doc.data().longurl,
               shorturl: doc.data().shorturl,
+              userId: doc.data().userId, // Add userId to link data
             },
-          }
+          };
         })
-      )
-    }
+      );
+    };
 
-    getLinks()
-  }, [])
+    getLinks();
+  }, []);
 
   return (
     <LinkContext.Provider value={{ users, links }}>{children}</LinkContext.Provider>
-  )
-}
+  );
+};
 
-export { LinkContext, LinkProvider }
+export { LinkContext, LinkProvider };

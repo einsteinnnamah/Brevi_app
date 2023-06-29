@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { LinkContext } from "../Context/LinkContext";
 import { useContext } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/pages/firebase";
 const ShortenLinkForm = () => {
   const [longURL, setLongURL] = useState("");
   const [name, setName] = useState("");
@@ -20,24 +22,31 @@ const ShortenLinkForm = () => {
 
   const handleShorten = async () => {
     setError("");
-
+  
     if (!validateURL(longURL)) {
       setError("Invalid URL format");
       return;
     }
-
+  
     try {
       const response = await axios.post("/api/shorten", {
         longURL,
         customAlias,
       });
       const { shortURL } = response.data;
-
-      setShortURL(shortURL); // Construct the full shortened URL with the "redirect" path
+  
+      setShortURL(shortURL);
+  
+      await addDoc(collection(db, "links"), {
+        name,
+        longurl: longURL,
+        shorturl: shortURL,
+      });
     } catch (error) {
       setError("Error occurred during URL shortening");
     }
   };
+  
 
   return (
     <div>

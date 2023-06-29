@@ -9,6 +9,7 @@ import Container from "@/components/Container";
 import Logo from "@/components/Logo";
 import signup from '../../public/users/signup.png'
 
+
 const Signup = () => {
   const router = useRouter();
 

@@ -5,6 +5,9 @@ import { LinkContext } from "../Context/LinkContext";
 import { useContext } from "react";
 import { collection, query, where, addDoc } from "firebase/firestore";
 import { db } from "@/pages/firebase";
+import Link from "next/link";
+
+
 const ShortenLinkForm = () => {
   const [longURL, setLongURL] = useState("");
   const [name, setName] = useState("");
@@ -13,24 +16,29 @@ const ShortenLinkForm = () => {
   const [error, setError] = useState("");
 
   const {links} = useContext(LinkContext)
-  console.log(links, '🔥')
 
-  const validateURL = (url: string) => {
-    const urlPattern = /^(ftp|http|https):\/\/[^ "]+$/;
-    return urlPattern.test(url);
+  //check if the longURL contains https:// or http://, if not include https://
+  const checkURL = (url: string) => {
+    if (!url.includes("https://") && !url.includes("http://")) {
+      return "https://" + url;
+    }
+    return url;
   };
 
   const handleShorten = async () => {
     setError("");
-  
-    if (!validateURL(longURL)) {
-      setError("Invalid URL format");
+
+    if (!longURL) {
+      setError("Please enter a URL");
       return;
     }
+    //check URL
+    const checkedURL = checkURL(longURL);
+    console.log(checkedURL)
   
     try {
       const response = await axios.post("/api/shorten", {
-        longURL,
+        longURL: checkedURL,
         customAlias,
       });
       const { shortURL } = response.data;
@@ -39,11 +47,12 @@ const ShortenLinkForm = () => {
   
       await addDoc(collection(db, "links"), {
         name,
-        longurl: longURL,
+        longurl: checkedURL,
         shorturl: shortURL,
       });
-    } catch (error) {
+    } catch (error: any) {
       setError("Error occurred during URL shortening");
+      console.log(error.message)
     }
   };
   
@@ -75,14 +84,14 @@ const ShortenLinkForm = () => {
           <p>Name: {name}</p>
           <p>
             Short URL:{" "}
-            <a href={shortURL} target="_blank" rel="noopener noreferrer">
+            <a href={checkURL(longURL)} target="_blank" rel="noopener noreferrer">
               {shortURL}
             </a>
           </p>
           <p>
             Long URL:{" "}
-            <a href={longURL} target="_blank" rel="noopener noreferrer">
-              {longURL}
+            <a href={checkURL(longURL)} target="_blank" rel="noopener noreferrer">
+              {checkURL(longURL)}
             </a>
           </p>
         </div> 
@@ -93,9 +102,9 @@ const ShortenLinkForm = () => {
                       <p>Name: {links.data.name}</p>
                       <p>
                         Short URL:{" "}
-                        <a href={links.data.shorturl} target="_blank" rel="noopener noreferrer">
+                        <Link href={`/redirect/${links.id}`} target="_blank" rel="noopener noreferrer">
                           {links.data.shorturl}
-                        </a>
+                        </Link>
                       </p>
                       <p>
                         Long URL:{" "}

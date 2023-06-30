@@ -5,6 +5,9 @@ import { LinkContext } from "../Context/LinkContext";
 import { useContext } from "react";
 import { collection, query, where, addDoc } from "firebase/firestore";
 import { db } from "@/pages/firebase";
+import Link from "next/link";
+
+
 const ShortenLinkForm = () => {
   const [longURL, setLongURL] = useState("");
   const [name, setName] = useState("");
@@ -42,8 +45,9 @@ const ShortenLinkForm = () => {
         longurl: longURL,
         shorturl: shortURL,
       });
-    } catch (error) {
+    } catch (error: any) {
       setError("Error occurred during URL shortening");
+      console.log(error.message)
     }
   };
   
@@ -75,7 +79,7 @@ const ShortenLinkForm = () => {
           <p>Name: {name}</p>
           <p>
             Short URL:{" "}
-            <a href={shortURL} target="_blank" rel="noopener noreferrer">
+            <a href={longURL} target="_blank" rel="noopener noreferrer">
               {shortURL}
             </a>
           </p>
@@ -93,9 +97,9 @@ const ShortenLinkForm = () => {
                       <p>Name: {links.data.name}</p>
                       <p>
                         Short URL:{" "}
-                        <a href={links.data.shorturl} target="_blank" rel="noopener noreferrer">
+                        <Link href={`/redirect/${links.id}`} target="_blank" rel="noopener noreferrer">
                           {links.data.shorturl}
-                        </a>
+                        </Link>
                       </p>
                       <p>
                         Long URL:{" "}

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext } from 'react';
 import { LinkContext } from "../../Context/LinkContext";
 
 const RedirectPage = () => {

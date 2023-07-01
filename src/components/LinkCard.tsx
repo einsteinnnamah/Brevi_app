@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { LinkContext } from "../Context/LinkContext";
 import { useContext } from "react";
-import { collection, query, where, addDoc } from "firebase/firestore";
+import { collection, query, where, addDoc, getDocs } from "firebase/firestore";
 import { db } from "@/pages/firebase";
 import Link from "next/link";
 
@@ -17,7 +17,6 @@ const ShortenLinkForm = () => {
 
   const {links} = useContext(LinkContext)
 
-  //check if the longURL contains https:// or http://, if not include https://
   const checkURL = (url: string) => {
     if (!url.includes("https://") && !url.includes("http://")) {
       return "https://" + url;
@@ -32,9 +31,7 @@ const ShortenLinkForm = () => {
       setError("Please enter a URL");
       return;
     }
-    //check URL
     const checkedURL = checkURL(longURL);
-    console.log(checkedURL)
   
     try {
       const response = await axios.post("/api/shorten", {
@@ -44,15 +41,22 @@ const ShortenLinkForm = () => {
       const { shortURL } = response.data;
   
       setShortURL(shortURL);
+
+      const q = query(collection(db, "links"), where("shorturl", "==", shortURL));
+      const querySnapshot = await getDocs(q);
+        if (querySnapshot.size > 0) {
+          setError("Alias already exists");
+          return;
+        }
+          await addDoc(collection(db, "links"), {
+            name,
+            longurl: checkedURL,
+            shorturl: shortURL,
+          });
   
-      await addDoc(collection(db, "links"), {
-        name,
-        longurl: checkedURL,
-        shorturl: shortURL,
-      });
     } catch (error: any) {
       setError("Error occurred during URL shortening");
-      console.log(error.message)
+       console.log(error.message)
     }
   };
   

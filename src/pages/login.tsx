@@ -99,7 +99,7 @@ const Login = () => {
                   Email address
                 </label>
                 <input
-                  className="w-[300px] md:w-[416px] focus:outline-none px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+                  className="w-[300px] md:w-[416px] focus:outline-French-Puce  px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -116,7 +116,7 @@ const Login = () => {
                   Password
                 </label>
                 <input
-                  className="w-[300px] focus:outline-none md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+                  className="w-[300px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

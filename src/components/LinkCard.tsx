@@ -60,13 +60,13 @@ const ShortenLinkForm = () => {
   return (
     <div>
       <h2 className="text-[24px]"> All links</h2>
-      <div className="flex flex-row-reverse gap-x-[20px] justify-between">
-      <div className="flex flex-col w-[460px] bg-[#F5F9FB] p-5 ">
+      <div className="flex lg:flex-row-reverse mb-[20px] flex-col gap-x-[20px] justify-between">
+      <div className="flex flex-col md:w-[460px] bg-[#F5F9FB] p-5 ">
         <div className="flex flex-col gap-y-[16px] mb-[8px]">
         <div className="flex flex-col">
    <label> Name</label>
       <input
-       className="w-[300px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+       className="w-[200px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -76,7 +76,7 @@ const ShortenLinkForm = () => {
    <div className="flex flex-col">
    <label> long Url</label>
       <input
-       className="w-[300px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+       className="w-[200] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
         type="text"
         value={longURL}
         onChange={(e) => setLongURL(e.target.value)}
@@ -86,7 +86,7 @@ const ShortenLinkForm = () => {
    <div className="flex flex-col">
    <label> Custom link (optional)</label>
       <input
-       className="w-[300px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+       className="w-[200px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
         type="text"
         value={customAlias}
         onChange={(e) => setCustomAlias(e.target.value)}
@@ -123,7 +123,7 @@ const ShortenLinkForm = () => {
 {links.map((links: any) => (
 
 
-  <div className="flex flex-col p-5 border-[gray] border-[1px] " key={links.id}>
+  <div className="flex flex-col p-3 border-[gray] border-[1px] " key={links.id}>
                       <p>Name: {links.data.name}</p>
                       <p>
                         Short URL:{" "}

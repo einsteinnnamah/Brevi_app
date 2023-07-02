@@ -80,28 +80,50 @@ const ShortenLinkForm = () => {
 
   return (
     <div>
+      <h2 className="text-[24px]"> All links</h2>
+      <div className="flex lg:flex-row-reverse mb-[20px] flex-col gap-x-[20px] justify-between">
+      <div className="flex flex-col md:w-[460px] bg-[#F5F9FB] p-5 ">
+        <div className="flex flex-col gap-y-[16px] mb-[8px]">
+        <div className="flex flex-col">
+   <label> Name</label>
       <input
+       className="w-[200px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Enter name"
       />
+   </div>
+   <div className="flex flex-col">
+   <label> long Url</label>
       <input
+       className="w-[200] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
         type="text"
         value={longURL}
         onChange={(e) => setLongURL(e.target.value)}
         placeholder="Enter the long URL"
       />
+   </div>
+   <div className="flex flex-col">
+   <label> Custom link (optional)</label>
       <input
+       className="w-[200px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
         type="text"
         value={customAlias}
         onChange={(e) => setCustomAlias(e.target.value)}
         placeholder="Custom alias (optional)"
       />
-      <button onClick={handleShorten}>Shorten</button>
-      {error && <p>{error}</p>}
-      {shortURL && (
-        <div>
+   </div>
+        </div>
+
+   {error && <p>{error}</p>}
+      <button className="h-[42px] md:h-[48px] md:flex items-center justify-center cursor-pointer rounded-[5px] text-[16px] md:text-[18px] font-semibold text-white bg-French-Puce w-full" onClick={handleShorten}>Shorten</button>
+     
+      </div>
+
+     
+      {/* {shortURL && (
+        <div className="flex">
           <p>Name: {name}</p>
           <p>
             Short URL:{" "}
@@ -116,10 +138,13 @@ const ShortenLinkForm = () => {
             </a>
           </p>
         </div> 
-      )}
+      )} */}
 
+<div className="flex flex-col gap-y-[16px]">
 {links.map((links: any) => (
-                      <div key={links.id}>
+
+
+  <div className="flex flex-col p-3 border-[gray] border-[1px] " key={links.id}>
                       <p>Name: {links.data.name}</p>
                       <p>
                         Short URL:{" "}
@@ -135,10 +160,11 @@ const ShortenLinkForm = () => {
                       </p>
                       <span>Number of clicks: {clickCount}</span>
                     </div>
+
+     
           ) )
 
           }
-
     </div>
   );
 };

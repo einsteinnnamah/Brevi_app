@@ -97,10 +97,9 @@ const [lastName, setLastName] = useState("")
               <p className="text-[#808080] align-middle text-[16px]">
                 Simplify your links, amplify your reach
               </p>
-              <div className="bg-[#f6c86c60] rounded-[5px] px-5 py-2 text-[#8d6c2b]">Name input is currently unavailable.</div>
             </div>
             <form className="flex mt-[32px] flex-col gap-y-[16px] ">
-              <div className="flex flex-col md:flex-row gap-y-[16px] gap-x-[16px] opacity-50">
+              <div className="flex flex-col md:flex-row gap-y-[16px] gap-x-[16px]">
                 <div className="flex flex-col gap-y-[4px] text-[#1e1e1e] ">
                   <label
                     htmlFor="first-name"
@@ -109,7 +108,7 @@ const [lastName, setLastName] = useState("")
                     First name
                   </label>
                   <input
-                    className="w-[300px] disabled focus:outline-none md:w-[200px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+                    className="w-[300px] disabled focus:outline-French-Puce md:w-[200px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
                     type="text"
                     name="firstName"
                     value={firstName}
@@ -126,7 +125,7 @@ const [lastName, setLastName] = useState("")
                     Last name
                   </label>
                   <input
-                    className="w-[300px] md:w-[200px] focus:outline-none px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+                    className="w-[300px] md:w-[200px] focus:outline-French-Puce  px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
                     type="text"
                     name="firstName"
                                       value={lastName}
@@ -144,7 +143,7 @@ const [lastName, setLastName] = useState("")
                   Email address
                 </label>
                 <input
-                  className="w-[300px] md:w-[416px] focus:outline-none px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+                  className="w-[300px] md:w-[416px] focus:outline-French-Puce  px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -161,7 +160,7 @@ const [lastName, setLastName] = useState("")
                   Password
                 </label>
                 <input
-                  className="w-[300px] focus:outline-none md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
+                  className="w-[300px] focus:outline-French-Puce  md:w-[416px] px-[14px] rounded-[5px] py-[10px] bg-[#E8E8E8]"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

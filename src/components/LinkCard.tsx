@@ -83,7 +83,7 @@ const ShortenLinkForm = () => {
     }
   };
 
-  const handleClick = async (id: any) => {
+  const handleClick = async (id: number) => {
     const linkRef = doc(db, "links", id);
     await updateDoc(linkRef, { clickCount: increment(1) });
   };

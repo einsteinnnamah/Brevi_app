@@ -14,9 +14,10 @@ const ShortenLinkForm = () => {
   const [customAlias, setCustomAlias] = useState("");
   const [shortURL, setShortURL] = useState("");
   const [error, setError] = useState("");
-
+  const [clickCount, setClickCount] = useState(0);
+  
   const {links} = useContext(LinkContext)
-
+  
   const checkURL = (url: string) => {
     if (!url.includes("https://") && !url.includes("http://")) {
       return "https://" + url;
@@ -40,14 +41,17 @@ const ShortenLinkForm = () => {
       });
       const { shortURL } = response.data;
   
-      setShortURL(shortURL);
-
+      
       const q = query(collection(db, "links"), where("shorturl", "==", shortURL));
       const querySnapshot = await getDocs(q);
         if (querySnapshot.size > 0) {
           setError("Alias already exists");
+          setTimeout(() => {
+            setError("")
+          }, 3000)
           return;
         }
+          setShortURL(shortURL);
           await addDoc(collection(db, "links"), {
             name,
             longurl: checkedURL,
@@ -55,10 +59,23 @@ const ShortenLinkForm = () => {
           });
   
     } catch (error: any) {
-      setError("Error occurred during URL shortening");
-       console.log(error.message)
+      setError("Error occurred during URL shortening, could be that the alias has been used before");
+      setTimeout(() => {
+        setError("")
+      }, 3000)
     }
   };
+
+  const handleClick = async (shorturl: string | number) => {
+    //update count if id matches
+    const q = query(collection(db, "links"), where("shorturl", "==", shorturl));
+    const querySnapshot = await getDocs(q);
+    console.log("querySnapshot", querySnapshot)
+    if (querySnapshot.size > 0) {
+      setClickCount(clickCount + 1);
+      console.log("click count", clickCount)
+    }
+  }
   
 
   return (
@@ -106,7 +123,7 @@ const ShortenLinkForm = () => {
                       <p>Name: {links.data.name}</p>
                       <p>
                         Short URL:{" "}
-                        <Link href={`/redirect/${links.id}`} target="_blank" rel="noopener noreferrer">
+                        <Link onClick={() => handleClick(links.data.shorturl)} href={`/redirect/${links.id}`} target="_blank" rel="noopener noreferrer">
                           {links.data.shorturl}
                         </Link>
                       </p>
@@ -116,10 +133,12 @@ const ShortenLinkForm = () => {
                           {links.data.longurl}
                         </a>
                       </p>
+                      <span>Number of clicks: {clickCount}</span>
                     </div>
           ) )
 
           }
+
     </div>
   );
 };

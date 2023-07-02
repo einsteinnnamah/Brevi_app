@@ -35,7 +35,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="px-[24px] xl:w-[1440px] mt-[20px] flex justify-between xl:px-[120px] lg:px-[64px] md:px-[32px] m-auto ">
+    <div className="px-[24px] xl:w-[1440px] pt-[20px] flex justify-between xl:px-[120px] lg:px-[64px] md:px-[32px] m-auto ">
       <h2>Welcome {firstName} 👋</h2>
       <button onClick={logout}>Log out</button>
     </div>

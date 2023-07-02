@@ -1,12 +1,17 @@
 "use client";
-import React, { useState } from "react";
-import axios from "axios";
-import { LinkContext } from "../Context/LinkContext";
-import { useContext } from "react";
-import { collection, query, where, addDoc, getDocs, deleteDoc } from "firebase/firestore";
-import { db } from "@/pages/firebase";
 import Link from "next/link";
+import React, { useState } from "react";
+import { useContext } from "react";
 
+//db
+import axios from "axios";
+import { db } from "@/pages/firebase";
+import { LinkContext } from "../Context/LinkContext";
+import { collection, query, where, addDoc, getDocs, deleteDoc } from "firebase/firestore";
+
+
+//components
+import DeleteModal from "../components/modals/DeleteModal";
 
 const ShortenLinkForm = () => {
   const [longURL, setLongURL] = useState("");
@@ -15,6 +20,8 @@ const ShortenLinkForm = () => {
   const [shortURL, setShortURL] = useState("");
   const [error, setError] = useState("");
   const [clickCount, setClickCount] = useState(0);
+  const [openModal, setOpenModal] = useState(false)
+  const [data, setData] = useState<any>("")
   const {links, setLinks} = useContext(LinkContext)
   
   const checkURL = (url: string) => {
@@ -83,26 +90,15 @@ const ShortenLinkForm = () => {
     }
   }
   
-  const handleDelete = async (shorturl: string | number) => {
-    const q = query(collection(db, "links"), where("shorturl", "==", shorturl));
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.size > 0) {
-      querySnapshot.forEach((doc) => {
-        deleteDoc(doc.ref);
-      });
-    }
-    const res = await getDocs(collection(db, "links"));
-    const data = res.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data(),
-    }));
-    setLinks(data);
+  const modalFunction = (shorturl: string | number) => {
+    setOpenModal(true)
+    setData(shorturl)
   }
 
   return (
     <div>
-      <h2 className="text-[24px]"> All links</h2>
-      <div className="flex lg:flex-row-reverse mb-[20px] flex-col gap-x-[20px] justify-between">
+      <h2 className="text-[24px] pt-4"> All links</h2>
+      <div className="flex mt-6 lg:flex-row-reverse mb-[20px] flex-col gap-x-[20px] justify-between">
       <div className="flex flex-col md:w-[460px] bg-[#F5F9FB] p-5 ">
         <div className="flex flex-col gap-y-[16px] mb-[8px]">
         <div className="flex flex-col">
@@ -162,27 +158,33 @@ const ShortenLinkForm = () => {
       )} */}
 
 <div className="flex flex-col gap-y-[16px]">
-{links.map((links: any) => (
+{links.map((link: any) => (
 
 
-  <div className="flex flex-col p-3 border-[gray] border-[1px] " key={links.id}>
-                      <p>Name: {links.data.name}</p>
+  <div className="flex flex-col p-3 border-[gray] border-[1px] " key={link.id}>
+                      <p>Name: {link.data.name}</p>
                       <p>
                         Short URL:{" "}
-                        <Link onClick={() => handleClick(links.data.shorturl)} href={`/redirect/${links.id}`} target="_blank" rel="noopener noreferrer">
-                          {links.data.shorturl}
+                        <Link onClick={() => handleClick(link.data.shorturl)} href={`/redirect/${link.id}`} target="_blank" rel="noopener noreferrer">
+                          {link.data.shorturl}
                         </Link>
                       </p>
                       <p>
                         Long URL:{" "}
-                        <a href={links.data.longurl} target="_blank" rel="noopener noreferrer">
-                          {links.data.longurl}
+                        <a href={link.data.longurl} target="_blank" rel="noopener noreferrer">
+                          {link.data.longurl}
                         </a>
                       </p>
                       <span>Number of clicks: {clickCount}</span>
-                    <div className="delete">
-                      <button onClick={() => handleDelete(links.data.shorturl)} className="bg-red-700 text-[#fff] font-semibold px-3 py-1 text-[14px] mt-4 rounded-md">Delete</button>
+                    <div className="delete flex justify-end">
+                      <button onClick={() => modalFunction(link.data.shorturl)} className="bg-red-700 text-[#fff] font-semibold px-3 py-1 text-[14px] mt-4 rounded-md">Delete</button>
                     </div>
+                    {openModal && (
+                                <DeleteModal
+                                  setOpenModal={setOpenModal}
+                                  shorturl={data}
+                                />
+                        )}
                     </div>     
           ) )
           }

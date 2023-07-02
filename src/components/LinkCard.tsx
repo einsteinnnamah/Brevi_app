@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { LinkContext } from "../Context/LinkContext";
 import { useContext } from "react";
-import { collection, query, where, addDoc, getDocs } from "firebase/firestore";
+import { collection, query, where, addDoc, getDocs, deleteDoc } from "firebase/firestore";
 import { db } from "@/pages/firebase";
 import Link from "next/link";
 
@@ -15,8 +15,7 @@ const ShortenLinkForm = () => {
   const [shortURL, setShortURL] = useState("");
   const [error, setError] = useState("");
   const [clickCount, setClickCount] = useState(0);
-  
-  const {links} = useContext(LinkContext)
+  const {links, setLinks} = useContext(LinkContext)
   
   const checkURL = (url: string) => {
     if (!url.includes("https://") && !url.includes("http://")) {
@@ -42,6 +41,7 @@ const ShortenLinkForm = () => {
       const { shortURL } = response.data;
   
       
+      setShortURL(shortURL);
       const q = query(collection(db, "links"), where("shorturl", "==", shortURL));
       const querySnapshot = await getDocs(q);
         if (querySnapshot.size > 0) {
@@ -51,12 +51,19 @@ const ShortenLinkForm = () => {
           }, 3000)
           return;
         }
-          setShortURL(shortURL);
-          await addDoc(collection(db, "links"), {
-            name,
-            longurl: checkedURL,
-            shorturl: shortURL,
-          });
+        const docRef = await addDoc(collection(db, "links"), {
+          name,
+          longurl: checkedURL,
+          shorturl: shortURL
+        });
+
+        const res = await getDocs(collection(db, "links"));
+        const data = res.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setLinks(data);        
+        return;
   
     } catch (error: any) {
       setError("Error occurred during URL shortening, could be that the alias has been used before");
@@ -67,7 +74,6 @@ const ShortenLinkForm = () => {
   };
 
   const handleClick = async (shorturl: string | number) => {
-    //update count if id matches
     const q = query(collection(db, "links"), where("shorturl", "==", shorturl));
     const querySnapshot = await getDocs(q);
     console.log("querySnapshot", querySnapshot)
@@ -77,6 +83,21 @@ const ShortenLinkForm = () => {
     }
   }
   
+  const handleDelete = async (shorturl: string | number) => {
+    const q = query(collection(db, "links"), where("shorturl", "==", shorturl));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.size > 0) {
+      querySnapshot.forEach((doc) => {
+        deleteDoc(doc.ref);
+      });
+    }
+    const res = await getDocs(collection(db, "links"));
+    const data = res.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
+    setLinks(data);
+  }
 
   return (
     <div>
@@ -159,11 +180,11 @@ const ShortenLinkForm = () => {
                         </a>
                       </p>
                       <span>Number of clicks: {clickCount}</span>
+                    <div className="delete">
+                      <button onClick={() => handleDelete(links.data.shorturl)} className="bg-red-700 text-[#fff] font-semibold px-3 py-1 text-[14px] mt-4 rounded-md">Delete</button>
                     </div>
-
-     
+                    </div>     
           ) )
-
           }
     </div>
       </div>

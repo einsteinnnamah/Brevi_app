@@ -48,7 +48,7 @@ const LinkProvider = ({ children }) => {
   }, []);
 
   return (
-    <LinkContext.Provider value={{ users, links }}>{children}</LinkContext.Provider>
+    <LinkContext.Provider value={{ users, links, setLinks }}>{children}</LinkContext.Provider>
   );
 };
 

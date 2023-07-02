@@ -33,7 +33,7 @@ const DeleteModal: React.FC<ModalProps> = ({ setOpenModal, shorturl }) => {
   return (
     <div className="bg-[#000] absolute left-0 w-screen top-0 h-screen bg-opacity-20 flex items-center justify-center ">
       <div className="bg-[#fff] shadow-2xl rounded-lg p-5">
-        <h2 className="font-semibold font-mono">Are you sure you want to delete this link?</h2>
+        <h2 className="font-semibold ">Are you sure you want to delete this link?</h2>
         <div className="flex justify-end space-x-2 text-[14px] mt-6">
           <button 
             className="bg-red-700 text-[#fff] font-semibold px-3 py-1 rounded-md"

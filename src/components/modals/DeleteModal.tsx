@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import axios from "axios";
-import { db } from "@/pages/firebase";
+import { db } from "../../pages/api/firebase";
 import { LinkContext } from "@/Context/LinkContext";
 import { collection, query, where, addDoc, getDocs, deleteDoc } from "firebase/firestore";
 

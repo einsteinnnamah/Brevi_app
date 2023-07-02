@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { db } from "@/pages/firebase";
+import { db } from "../pages/api/firebase";
 import { LinkContext } from "../Context/LinkContext";
 import {
   collection,
@@ -26,7 +26,7 @@ const ShortenLinkForm = () => {
   const [data, setData] = useState<any>("");
   const { links, setLinks } = useContext(LinkContext);
 
-  const checkURL = (url: any) => {
+  const checkURL = (url: string) => {
     if (!url.includes("https://") && !url.includes("http://")) {
       return "https://" + url;
     }
@@ -83,12 +83,12 @@ const ShortenLinkForm = () => {
     }
   };
 
-  const handleClick = async (id: number) => {
+  const handleClick = async (id: string) => {
     const linkRef = doc(db, "links", id);
     await updateDoc(linkRef, { clickCount: increment(1) });
   };
 
-  const modalFunction = (id: any) => {
+  const modalFunction = (id: string) => {
     setOpenModal(true);
     setData(id);
   };
@@ -102,9 +102,10 @@ const ShortenLinkForm = () => {
       }));
       setLinks(data);
     };
-  
+
     fetchLinks();
   }, [setLinks]);
+
   return (
     <div>
       <h2 className="text-[24px] pt-4"> All links</h2>

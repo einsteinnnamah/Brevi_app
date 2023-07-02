@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore"
-import { db } from "./firebase";
-import { auth } from "./firebase";
+import { db } from "../pages/api/firebase";
+import { auth } from "../pages/api/firebase";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";

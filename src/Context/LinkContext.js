@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../pages/firebase';
+import { db } from '../pages/api/firebase';
 
 const LinkContext = createContext();
 

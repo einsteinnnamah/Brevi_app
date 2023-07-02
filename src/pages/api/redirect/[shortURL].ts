@@ -2,14 +2,14 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 const Redirect = () => {
-  const router = useRouter();
-  const { shortURL } = router.query;
+  const { query, replace } = useRouter();
+  const { shortURL } = query;
 
   useEffect(() => {
     if (shortURL) {
-      router.replace(`/api/shorten?shortURL=${shortURL}`);
+      replace(`/api/shorten?shortURL=${shortURL}`);
     }
-  }, [router, shortURL]);
+  }, [replace, shortURL]);
 
   return null;
 };

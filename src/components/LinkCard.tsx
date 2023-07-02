@@ -88,19 +88,20 @@ const ShortenLinkForm = () => {
     await updateDoc(linkRef, { clickCount: increment(1) });
   };
 
-  const modalFunction = (id: string) => {
-    setOpenModal(true);
-    setData(id);
-  };
+  const modalFunction = (shorturl: string | number) => {
+    setOpenModal(true)
+    setData(shorturl)
+  }
+
 
   useEffect(() => {
     const fetchLinks = async () => {
       const querySnapshot = await getDocs(collection(db, "links"));
-      const data = querySnapshot.docs.map((doc) => ({
+      const updatedData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         data: doc.data(),
       }));
-      setLinks(data);
+      setLinks(updatedData);
     };
 
     fetchLinks();
@@ -177,7 +178,7 @@ const ShortenLinkForm = () => {
               <span>Number of clicks: {link.data.clickCount}</span>
               <div className="delete flex justify-end">
                 <button
-                  onClick={() => modalFunction(link.id)}
+                  onClick={() => modalFunction(link.data.shorturl)}
                   className="bg-red-700 text-[#fff] font-semibold px-3 py-1 text-[14px] mt-4 rounded-md"
                 >
                   Delete
